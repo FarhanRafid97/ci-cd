@@ -1,5 +1,5 @@
 {
-  "name": "ch9-sample-server",
+  "name": "ch9-sample-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

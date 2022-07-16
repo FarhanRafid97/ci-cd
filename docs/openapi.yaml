@@ -1,0 +1,160 @@
+openapi: 3.0.1
+
+info:
+  description: Ini description aplikasinya
+  title: Nama app
+  version: 1.0.0
+
+tags:
+  - name: Article
+    description: Article resources
+
+paths:
+  /articles:
+    get:
+      tags:
+        - Article
+      summary: List all available articles
+      description: Description for list article
+      operationId: getArticles
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Article"
+    post:
+      tags:
+        - Article
+      summary: Add new article
+      description: Create new
+      operationId: addArticle
+      requestBody:
+        $ref: "#/components/requestBodies/Article"
+      responses:
+        201:
+          $ref: "#/components/responses/Article"
+        400:
+          description: Failed to create new article
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to create new article
+
+  /articles/{articleId}:
+    get:
+      tags:
+        - Article
+      summary: Find article by ID
+      description: Returns a single Article
+      operationId: getArticleById
+      parameters:
+        - $ref: "#/components/parameters/Article"
+      responses:
+        200:
+          $ref: "#/components/responses/Article"
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Article not found
+
+    put:
+      tags:
+        - Article
+      summary: Edit article by ID
+      description: Updates a single article
+      parameters:
+        - $ref: "#/components/parameters/Article"
+      requestBody:
+        $ref: "#/components/requestBodies/Article"
+      responses:
+        200:
+          $ref: "#/components/responses/Article"
+        400:
+          description: Failed to update this article
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to update this article
+        404:
+          description: Article not found
+
+    delete:
+      tags:
+        - Article
+      summary: Delete article by ID
+      description: Deletes a single article
+      parameters:
+        - $ref: "#/components/parameters/Article"
+      responses:
+        204:
+          description: Successfully delete article by ID
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Article not found
+
+components:
+  schemas:
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Lorem Ipsum
+        body:
+          type: string
+          example: Dolor sit amet
+
+  requestBodies:
+    Article:
+      description: Article object
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                example: Lorem Ipsum
+              body:
+                type: string
+                example: Dolor sit amet
+
+  responses:
+    Article:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Article"
+
+  parameters:
+    Article:
+      in: path
+      name: articleId
+      description: ID of article to return
+      required: true
+      schema:
+        type: integer
+
+  securitySchemes:
+    Token:
+      type: apiKey
+      in: header
+      name: Authorization

@@ -6,10 +6,58 @@ info:
   version: 1.0.0
 
 tags:
+  - name: Auth
+    description: Authentication resources
   - name: Article
     description: Article resources
 
 paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login user
+      operationId: login
+      requestBody:
+        $ref: "#/components/requestBodies/Auth"
+      responses:
+        200:
+          $ref: "#/components/responses/Auth"
+        400:
+          description: Login failed
+
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register new user
+      operationId: register
+      requestBody:
+        $ref: "#/components/requestBodies/Auth"
+      responses:
+        200:
+          $ref: "#/components/responses/Auth"
+        400:
+          description: Register failed
+
+  /auth/whoami:
+    get:
+      tags:
+        - Auth
+      summary: Get info current logged in user
+      operationId: whoami
+      security:
+        - Token: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+
   /articles:
     get:
       tags:
@@ -32,6 +80,8 @@ paths:
       summary: Add new article
       description: Create new
       operationId: addArticle
+      security:
+        - Token: []
       requestBody:
         $ref: "#/components/requestBodies/Article"
       responses:
@@ -47,6 +97,8 @@ paths:
                   message:
                     type: string
                     example: Failed to create new article
+        401:
+          $ref: "#/components/responses/Unauthorized"
 
   /articles/{articleId}:
     get:
@@ -55,6 +107,8 @@ paths:
       summary: Find article by ID
       description: Returns a single Article
       operationId: getArticleById
+      security:
+        - Token: []
       parameters:
         - $ref: "#/components/parameters/Article"
       responses:
@@ -62,6 +116,8 @@ paths:
           $ref: "#/components/responses/Article"
         400:
           description: Invalid ID supplied
+        401:
+          $ref: "#/components/responses/Unauthorized"
         404:
           description: Article not found
 
@@ -70,6 +126,8 @@ paths:
         - Article
       summary: Edit article by ID
       description: Updates a single article
+      security:
+        - Token: []
       parameters:
         - $ref: "#/components/parameters/Article"
       requestBody:
@@ -87,6 +145,8 @@ paths:
                   message:
                     type: string
                     example: Failed to update this article
+        401:
+          $ref: "#/components/responses/Unauthorized"
         404:
           description: Article not found
 
@@ -95,6 +155,8 @@ paths:
         - Article
       summary: Delete article by ID
       description: Deletes a single article
+      security:
+        - Token: []
       parameters:
         - $ref: "#/components/parameters/Article"
       responses:
@@ -102,6 +164,8 @@ paths:
           description: Successfully delete article by ID
         400:
           description: Invalid ID supplied
+        401:
+          $ref: "#/components/responses/Unauthorized"
         404:
           description: Article not found
 
@@ -120,6 +184,16 @@ components:
           type: string
           example: Dolor sit amet
 
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: sabrina01
+
   requestBodies:
     Article:
       description: Article object
@@ -136,6 +210,21 @@ components:
                 type: string
                 example: Dolor sit amet
 
+    Auth:
+      description: Auth object
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+                example: sabrina01
+              password:
+                type: string
+                example: selaluberbinar
+
   responses:
     Article:
       description: Successful operation
@@ -143,6 +232,26 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/Article"
+
+    Auth:
+      description: Auth success (token generated)
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1
+              username:
+                type: string
+                example: sabrina01
+              accessToken:
+                type: string
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzYWJyaW5hMDEiLCJpYXQiOjE2NTgyODQxNDR9.8OoPMiZOA6OSqQ5G8C_KHbfzeYc2VyajagMi8lPhdM8
+
+    Unauthorized:
+      description: Authentication required
 
   parameters:
     Article:

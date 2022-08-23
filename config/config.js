@@ -16,6 +16,7 @@ module.exports = {
     dialect: "postgres",
   },
   production: {
+    // Reference: https://stackoverflow.com/a/70243144
     use_env_variable: "DATABASE_URL",
     dialect: "postgres",
     protocol: "postgres",

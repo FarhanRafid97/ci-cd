@@ -1,12 +1,12 @@
-require("dotenv").config();
+require('dotenv').config();
 
-const express = require("express");
-const cors = require("cors");
-const swaggerUI = require("swagger-ui-express");
+const express = require('express');
+const cors = require('cors');
+const swaggerUI = require('swagger-ui-express');
 
-const passport = require("./lib/passport");
-const router = require("./routes");
-const swaggerJSON = require("./docs/openapi.json");
+const passport = require('./lib/passport');
+const router = require('./routes');
+const swaggerJSON = require('./docs/openapi.json');
 
 const app = express();
 
@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(passport.initialize());
 
-app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerJSON));
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerJSON));
 
 app.use(router);
 

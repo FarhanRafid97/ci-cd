@@ -1,2 +1,2 @@
 release: npm run migrate
-web: node app.js
+web: npm run start

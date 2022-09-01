@@ -6,41 +6,20 @@ on:
             - main
 
 jobs:
-    lint:
-        name: ⬣ ESLint
+    deploy:
+        name: 🚀 Deploy
         runs-on: ubuntu-latest
-        steps:
-            - name: 🛑 Cancel Previous Runs
-              uses: styfle/cancel-workflow-action@0.10.0
 
+        # only deploy main branch on pushes
+        if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+
+        steps:
             - name: ⬇️ Checkout repo
               uses: actions/checkout@v3
 
-            - name: ⎔ Setup node
-              uses: actions/setup-node@v3
+            - name: 🚀 Deploy to Heroku
+              uses: akhileshns/heroku-deploy@v3.12.12
               with:
-                  node-version: 16
-
-            - name: 📥 Download deps
-              uses: bahmutov/npm-install@v1
-
-            - name: 🔬 Lint
-              run: npm run lint
-
-        deploy:
-            name: 🚀 Deploy
-            runs-on: ubuntu-latest
-
-            # only deploy main branch on pushes
-            if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
-
-            steps:
-                - name: ⬇️ Checkout repo
-                  uses: actions/checkout@v3
-
-                - name: 🚀 Deploy to Heroku
-                  uses: akhileshns/heroku-deploy@v3.12.12
-                  with:
-                      heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-                      heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-                      heroku_email: ${{ secrets.HEROKU_EMAIL }}
+                  heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+                  heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+                  heroku_email: ${{ secrets.HEROKU_EMAIL }}

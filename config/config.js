@@ -14,8 +14,15 @@ module.exports = {
     database: `${process.env.DB_NAME}_test`,
     host: 'localhost',
     dialect: 'postgres',
+<<<<<<< HEAD
   },
   production: {
+=======
+    logging: false,
+  },
+  production: {
+    // Reference: https://stackoverflow.com/a/70243144
+>>>>>>> 09ee8b0e22cc1f5fdf3c097599ead789a8e004cd
     use_env_variable: 'DATABASE_URL',
     dialect: 'postgres',
     protocol: 'postgres',

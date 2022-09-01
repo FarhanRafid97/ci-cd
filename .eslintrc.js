@@ -10,5 +10,7 @@ module.exports = {
     parserOptions: {
         ecmaVersion: "latest",
     },
-    rules: {},
+    rules: {
+        "prefer-promise-reject-errors": "off",
+    },
 }
